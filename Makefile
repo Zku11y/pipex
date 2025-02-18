@@ -1,10 +1,10 @@
 NAME = pipex
 
-SRC = src/main.c src/utils.c
+SRC = src/main.c src/utils.c misc/ft_split_ps.c
 
 LIBFT = includes/libft/libft.a
 
-CC = cc -fsanitize=address
+CC = gcc -g
 
 RM = rm -fr
 
@@ -25,7 +25,7 @@ $(NAME):$(OBJ) $(LIBFT)
 
 
 clean:
-	$(RM) $(NAME)
+	$(RM) $(OBJ)
 	make -C  includes/libft clean
 
 fclean: clean
