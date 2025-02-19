@@ -6,7 +6,7 @@
 /*   By: mdakni <mdakni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 00:31:58 by skully            #+#    #+#             */
-/*   Updated: 2025/02/18 22:46:12 by mdakni           ###   ########.fr       */
+/*   Updated: 2025/02/19 01:11:29 by mdakni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	file_manage(char **av)
 		exit(1);
 	}
 }
+
 
 char	*path_parse(char **env)
 {
@@ -76,7 +77,15 @@ char	**cmd_parse(char **av)
 	int		i;
 	char	**command;
 
-	if (!ft_strchr(av[2], '\'') && !ft_strchr(av[2], '\"'))
-		command = ft_split(av[2], ' ');
+	command = NULL;
+	command = ft_split_ps(av[2], ' ');
+	i = 0;
+	printf("im here!\n");
+	while (command[i])
+	{	
+		printf("part %d : \e[1;44m%s\e[0m\n", i,  command[i]);
+		i++;
+	}
+
 	return (NULL);
 }

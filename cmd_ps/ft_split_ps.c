@@ -6,7 +6,7 @@
 /*   By: mdakni <mdakni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 18:50:16 by mdakni            #+#    #+#             */
-/*   Updated: 2025/02/18 19:07:31 by mdakni           ###   ########.fr       */
+/*   Updated: 2025/02/19 01:47:12 by mdakni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,19 @@ static int	size_word(char const *s, char c)
 	int	i;
 
 	i = 0;
-	if (s[i] == '\'' || s[i] == '\"')
+	if (*(s - 1) == '\'')
 	{
 		i++;
-		while (s[i] != '\'' && s[i] != '\"' && s[i])
+		while (s[i] != '\'' && s[i])
+		{
+			i++;
+			printf("%c\n", s[i]);
+		}
+	}
+	else if (*(s - 1) == '\"')
+	{
+		i++;
+		while (s[i] != '\"' && s[i])
 			i++;
 	}
 	else
@@ -29,34 +38,6 @@ static int	size_word(char const *s, char c)
 			i++;
 	}
 	return (i);
-}
-
-static size_t	count_word(char const *s, char c)
-{
-	size_t	i;
-	size_t	count;
-
-	i = 0;
-	count = 0;
-	while (s[i])
-	{
-		if (s[i] != c)
-		{
-			while (s[i] != c && s[i])
-				i++;
-			count++;
-		}
-		else if (s[i] == '\'' || s[i] == '\"')
-		{
-			i++;
-			while (s[i] != '\'' && s[i] != '\"' && s[i])
-				i++;
-			count++;
-		}
-		else
-			i++;
-	}
-	return (count);
 }
 
 static void	free_mem(char **answer, size_t count)
@@ -82,6 +63,8 @@ static char	**insert_word(char **answer, size_t count, char const *s, char c)
 			i++;
 		if (!s[i])
 			return (answer);
+		if (s[i] == '\'' || s[i] == '\'')
+			i++;
 		answer[index] = ft_substr(s, i, size_word(s + i, c));
 		if (answer[index] == NULL)
 		{
@@ -101,7 +84,7 @@ char	**ft_split_ps(char const *s, char c)
 
 	if (!s)
 		return (NULL);
-	count = count_word(s, c);
+	count = count_word_pss(s, c);
 	answer = malloc(sizeof(char *) * (count + 1));
 	if (answer == NULL)
 		return (NULL);

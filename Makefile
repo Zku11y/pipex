@@ -1,6 +1,6 @@
 NAME = pipex
 
-SRC = src/main.c src/utils.c misc/ft_split_ps.c
+SRC = src/main.c src/utils.c cmd_ps/ft_split_ps.c cmd_ps/misc.c
 
 LIBFT = includes/libft/libft.a
 

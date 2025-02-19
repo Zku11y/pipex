@@ -6,7 +6,7 @@
 /*   By: mdakni <mdakni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 18:08:45 by skully            #+#    #+#             */
-/*   Updated: 2025/02/18 18:29:07 by mdakni           ###   ########.fr       */
+/*   Updated: 2025/02/18 23:26:13 by mdakni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,10 @@ void	parent(int *fd, char **env, char **av)
 {
 	printf("\nin the parent process rn\n");
 }
-
+ void systema ()
+ {
+	 system("leaks main");
+ }
 int	main(int ac, char **av, char **env)
 {
 	int		fd[2];
@@ -48,5 +51,6 @@ int	main(int ac, char **av, char **env)
 	wait(NULL);
 	if (access(av[1], F_OK & R_OK) != -1)
 		parent(fd, env, av);
+	atexit(systema);
 	return (0);
 }
