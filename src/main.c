@@ -6,11 +6,16 @@
 /*   By: mdakni <mdakni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 18:08:45 by skully            #+#    #+#             */
-/*   Updated: 2025/02/18 23:26:13 by mdakni           ###   ########.fr       */
+/*   Updated: 2025/02/21 22:01:58 by mdakni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../pipex.h"
+
+ void systema ()
+ {
+	system("leaks pipex");
+ }
 
 void	child(int *fd, char **env, char **av)
 {
@@ -18,18 +23,17 @@ void	child(int *fd, char **env, char **av)
 	char	**command;
 
 	file_manage(av);
-	path = path_parse(env);
-	printf("the path to the first command is : %s\n", path);
 	command = cmd_parse(av);
+	printf("\e[1;45mim here!!\e[0m\n");
+	path = path_parse(env, command[0]);
+	printf("the path to the first command is : %s\n", path);
+	free_2(command);
+	// atexit(systema);
 }
 void	parent(int *fd, char **env, char **av)
 {
 	printf("\nin the parent process rn\n");
 }
- void systema ()
- {
-	 system("leaks main");
- }
 int	main(int ac, char **av, char **env)
 {
 	int		fd[2];
@@ -49,8 +53,8 @@ int	main(int ac, char **av, char **env)
 		exit(1);
 	}
 	wait(NULL);
+	// atexit(systema);
 	if (access(av[1], F_OK & R_OK) != -1)
 		parent(fd, env, av);
-	atexit(systema);
 	return (0);
 }

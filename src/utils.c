@@ -6,7 +6,7 @@
 /*   By: mdakni <mdakni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 00:31:58 by skully            #+#    #+#             */
-/*   Updated: 2025/02/19 01:11:29 by mdakni           ###   ########.fr       */
+/*   Updated: 2025/02/21 22:04:53 by mdakni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,27 +15,32 @@
 void	file_manage(char **av)
 {
 	int	outfile;
+	int infile;
 
 	outfile = open("outfile.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (outfile == -1)
 	{
-		perror("Fd Error");
+		perror("\e[1;41moutfile Error\e[0m\n");
 		exit(1);
 	}
-	if (access(av[1], F_OK & R_OK) == -1)
+	close(outfile);
+	infile = open(av[1], O_RDONLY);
+	if (infile == -1)
 	{
-		close(outfile);
-		perror("Infile Error");
+		printf("\e[1;41minfile : %s\e[0m\n", av[1]);
+		perror("\e[1;41mInfile Error\e[0m\n");
+		close(infile);
 		exit(1);
 	}
+	close(infile);
 }
 
-
-char	*path_parse(char **env)
+char	*path_parse(char **env, char *cmd)
 {
 	int		i;
 	int		j;
-	char	*str;
+	char *tmp;
+	char *str;
 	char	**str2;
 
 	i = 0;
@@ -54,17 +59,38 @@ char	*path_parse(char **env)
 	str2 = ft_split(env[i] + 5, ':');
 	while (str2[j])
 	{
-		printf("\e[1;31mPath %d :\e[0m \e[1;32m%s\e[0m\n", j, str2[j]);
-		if (access(ft_strjoin(str2[j], "/cat"), F_OK & X_OK) == 0)
+		str = ft_strjoin("/", cmd);
+		tmp = ft_strjoin(str2[j], str);
+		printf("\e[1;31mPath : %d\e[0m \e[1;32m%s\e[0m\n", j, str2[j]);
+		free(str);
+		if (access(tmp, F_OK & X_OK) == 0)
 		{
-			printf("\e[1;35m\nFound it! : \e[0m \e[1;36m%s\e[0m\n\n",
-				ft_strjoin(str2[j], "/cat"));
-			break ;
+			printf("\e[1;35m\nFound it! : \e[0m \e[1;36m%s\e[0m\n\n", str);
+			free(tmp);
+			break;
 		}
+		free(tmp);
 		j++;
 	}
-	return (ft_strjoin(str2[j], "/cat"));
+	free_2(str2);
+	return (tmp);
 }
+
+void free_2(char **str)
+{
+	int i;
+
+	i = 0;
+	while(str[i])
+	{
+		free(str[i]);
+		str[i] = NULL;
+		i++;
+	}
+	free(str);
+	str = NULL;
+}
+
 void	check_leaks(void)
 {
 	char	cmd[256];
@@ -82,10 +108,9 @@ char	**cmd_parse(char **av)
 	i = 0;
 	printf("im here!\n");
 	while (command[i])
-	{	
+	{
 		printf("part %d : \e[1;44m%s\e[0m\n", i,  command[i]);
 		i++;
 	}
-
-	return (NULL);
+	return (command);
 }
