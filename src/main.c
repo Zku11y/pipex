@@ -6,7 +6,7 @@
 /*   By: mdakni <mdakni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 18:08:45 by skully            #+#    #+#             */
-/*   Updated: 2025/02/21 22:01:58 by mdakni           ###   ########.fr       */
+/*   Updated: 2025/02/22 19:01:27 by mdakni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,38 @@ void	child(int *fd, char **env, char **av)
 {
 	char	*path;
 	char	**command;
+	t_fd fds;
 
-	file_manage(av);
-	command = cmd_parse(av);
+	fds = file_manage(av, 1);
+	command = cmd_parse(av, 2);
 	printf("\e[1;45mim here!!\e[0m\n");
 	path = path_parse(env, command[0]);
+	printf("\n\npath is : %s\n\n", path);
 	printf("the path to the first command is : %s\n", path);
+	cmd1(fds.fd1, command, path, fd);
+	free(path);
 	free_2(command);
-	// atexit(systema);
+	atexit(systema);
 }
 void	parent(int *fd, char **env, char **av)
 {
-	printf("\nin the parent process rn\n");
+	char	*path;
+	char	**command;
+	t_fd 	fds;
+
+	fds = file_manage(av, 1);
+	close(fds.fd2);
+	command = cmd_parse(av, 3);
+	printf("\e[1;45mim here!!\e[0m\n");
+	path = path_parse(env, command[0]);
+	printf("\n\npath is : %s\n\n", path);
+	printf("the path to the first command is : %s\n", path);
+	cmd2(fds.fd2, command, path, fd);
+	free(path);
+	free_2(command);
+	atexit(systema);
 }
+
 int	main(int ac, char **av, char **env)
 {
 	int		fd[2];

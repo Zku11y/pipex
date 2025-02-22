@@ -6,33 +6,24 @@
 /*   By: mdakni <mdakni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 00:31:58 by skully            #+#    #+#             */
-/*   Updated: 2025/02/21 22:04:53 by mdakni           ###   ########.fr       */
+/*   Updated: 2025/02/22 18:49:22 by mdakni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../pipex.h"
 
-void	file_manage(char **av)
+t_fd	file_manage(char **av, int i)
 {
-	int	outfile;
-	int infile;
+	t_fd fds;
 
-	outfile = open("outfile.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (outfile == -1)
+	fds.fd1 = open("outfile.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	fds.fd2 = open(av[i], O_RDONLY);
+	if (fds.fd1 == -1 || fds.fd2 == -1)
 	{
-		perror("\e[1;41moutfile Error\e[0m\n");
+		perror("\e[1;41mFd Error\e[0m\n");
 		exit(1);
 	}
-	close(outfile);
-	infile = open(av[1], O_RDONLY);
-	if (infile == -1)
-	{
-		printf("\e[1;41minfile : %s\e[0m\n", av[1]);
-		perror("\e[1;41mInfile Error\e[0m\n");
-		close(infile);
-		exit(1);
-	}
-	close(infile);
+	return (fds);
 }
 
 char	*path_parse(char **env, char *cmd)
@@ -66,7 +57,6 @@ char	*path_parse(char **env, char *cmd)
 		if (access(tmp, F_OK & X_OK) == 0)
 		{
 			printf("\e[1;35m\nFound it! : \e[0m \e[1;36m%s\e[0m\n\n", str);
-			free(tmp);
 			break;
 		}
 		free(tmp);
@@ -98,13 +88,13 @@ void	check_leaks(void)
 	snprintf(cmd, sizeof(cmd), "leaks %d", getpid());
 	system(cmd);
 }
-char	**cmd_parse(char **av)
+char	**cmd_parse(char **av, int index)
 {
 	int		i;
 	char	**command;
 
 	command = NULL;
-	command = ft_split_ps(av[2], ' ');
+	command = ft_split_ps(av[index], ' ');
 	i = 0;
 	printf("im here!\n");
 	while (command[i])
