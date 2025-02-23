@@ -6,7 +6,7 @@
 /*   By: mdakni <mdakni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 23:03:53 by skully            #+#    #+#             */
-/*   Updated: 2025/02/22 18:55:12 by mdakni           ###   ########.fr       */
+/*   Updated: 2025/02/23 07:10:27 by mdakni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef struct fd_struct
     int fd2;
 }       t_fd;
 
+void    systema();
 void    free_2(char **str);
 void	check_leaks(void);
 t_fd	file_manage(char **av, int i);
