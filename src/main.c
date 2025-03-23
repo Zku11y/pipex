@@ -6,7 +6,7 @@
 /*   By: mdakni <mdakni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 18:08:45 by skully            #+#    #+#             */
-/*   Updated: 2025/02/23 07:24:38 by mdakni           ###   ########.fr       */
+/*   Updated: 2025/03/23 22:55:23 by mdakni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,70 +19,74 @@ void systema()
     system(cmd);
 }
 
-void	child(int *fd, char **env, char **av)
+void manager_2(int *fd, t_fd fds, char **env, char **av, pid_t pid)
 {
 	char	*path;
 	char	**command;
-	t_fd fds;
 
-	fds = file_manage(av, 1);
-	close(fds.fd1);
-	command = cmd_parse(av, 2);
-	// printf("\e[1;45mim here!!\e[0m\n");
-	path = path_parse(env, command[0]);
-	// printf("\n\npath is : %s\n\n", path);
-	// printf("the path to the first command is : %s\n", path);
-	cmd1(fds.fd2, command, path, fd);
-	free(path);
-	free_2(command);
-	// atexit(systema);
-}
-void	parent(int *fd, char **env, char **av)
-{
-	char	*path;
-	char	**command;
-	t_fd 	fds;
-
-	fds = file_manage(av, 1);
-	close(fds.fd2);
 	command = cmd_parse(av, 3);
-	// printf("\e[1;45mim here!!\e[0m\n");
+	check_is_path(command);
 	path = path_parse(env, command[0]);
-	// printf("\n\npath is : %s\n\n", path);
-	// printf("the path to the first command is : %s\n", path);
-	cmd2(fds.fd1, command, path, fd);
+	if (!pid)
+	{
+		if(fds.fd1 == -1)
+		{
+			perror("Outfile Error");
+			exit(1);
+		}
+		close(fds.fd2);
+		cmd2(fds.fd1, command, path, fd);
+	}
 	free(path);
 	free_2(command);
-	// atexit(systema);
+}
+void manager_1(int *fd,t_fd fds, char **env, char **av, pid_t pid)
+{
+	char	*path;
+	char	**command;
+	command = cmd_parse(av, 2);
+	check_is_path(command);
+	path = path_parse(env, command[0]);
+	if (!pid)
+	{
+		if(fds.fd2 == -1)
+		{
+			perror("Infile Error");
+			exit(1);
+		}
+		close(fds.fd1);
+		cmd1(fds.fd2, command, path, fd);
+	}
+	free(path);
+	free_2(command);
 }
 
 int	main(int ac, char **av, char **env)
 {
 	int		fd[2];
-	pid_t	pid;
+	t_pid	pid;
+	t_fd	fds;
 
-	check_leaks();
+	// check_leaks();
+	fds = file_manage(av, 1);
 	if (ac != 5)
-		return (printf("./pipex infile cmd1 cmd2 outfile"), 1);
+	{
+		ft_putstr_fd("Usage: ./pipex infile cmd1 cmd2 outfile\n", 1);
+		return (1);
+	}
 	if (pipe(fd) == -1)
 		return (perror("Pipe error"), 1);
-	pid = fork();
-	if (pid == -1)
-		return (perror("Fork error"), 1);
-	if (!pid)
-	{
-		systema();
-		child(fd, env, av);
-		exit(1);
-	}
-	else
-	{
-		wait(NULL);
-		if (access(av[1], F_OK & R_OK) != -1)
-		{
-			systema();
-			parent(fd, env, av);
-		}
-	}
+	pid.pid1 = fork();
+	if (pid.pid1 == -1)
+		return (perror("First Fork error"), 1);
+	manager_1(fd, fds, env, av, pid.pid1);
+	pid.pid2 = fork();
+	if (pid.pid2 == -1)
+		return (perror("Second Fork error"), 1);
+	manager_2(fd, fds, env, av, pid.pid2);
+    close(fd[0]);
+    close(fd[1]);
+	waitpid(pid.pid2, NULL, 0);
+    waitpid(pid.pid1, NULL, 0);
 	return (0);
 }

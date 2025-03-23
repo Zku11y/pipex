@@ -6,38 +6,59 @@
 /*   By: mdakni <mdakni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 18:50:16 by mdakni            #+#    #+#             */
-/*   Updated: 2025/02/21 21:09:47 by mdakni           ###   ########.fr       */
+/*   Updated: 2025/03/23 22:13:25 by mdakni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../pipex.h"
 
+#include <stdbool.h>
+
 static int	size_word(char const *s, char c)
 {
 	int	i;
+	bool	inside_quotes;
 
 	i = 0;
-	if (*(s - 1) == '\'')
+	inside_quotes = false;
+	while (s[i])
 	{
+		if (s[i] == '\'')
+			inside_quotes = !inside_quotes;
+		else if (s[i] == c && !inside_quotes)
+			break;
 		i++;
-		while (s[i] != '\'' && s[i])
-		{
-			i++;
-			printf("%c\n", s[i]);
-		}
-	}
-	else if (*(s - 1) == '\"')
-	{
-		i++;
-		while (s[i] != '\"' && s[i])
-			i++;
-	}
-	else
-	{
-		while (s[i] != c && s[i])
-			i++;
 	}
 	return (i);
+}
+
+static size_t	count_word(char const *s, char c)
+{
+	size_t	i;
+	size_t	count;
+	bool	inside_quotes;
+
+	i = 0;
+	count = 0;
+	inside_quotes = false;
+	while (s[i])
+	{
+		if (s[i] == '\'')
+			inside_quotes = !inside_quotes;
+		if (s[i] != c || inside_quotes)
+		{
+			while ((s[i] != c || inside_quotes) && s[i])
+			{
+				if (s[i] == '\'')
+					inside_quotes = !inside_quotes;
+				i++;
+			}
+			count++;
+		}
+		else
+			i++;
+	}
+	return (count);
 }
 
 static void	free_mem(char **answer, size_t count)
@@ -50,10 +71,33 @@ static void	free_mem(char **answer, size_t count)
 	free(answer);
 }
 
+static char	*extract_word_without_quotes(char const *s, int size)
+{
+	char	*word;
+	int	i;
+	int	j;
+
+	word = (char *)malloc(sizeof(char) * (size + 1));
+	if (!word)
+		return (NULL);
+	
+	i = 0;
+	j = 0;
+	while (i < size)
+	{
+		if (s[i] != '\'')
+			word[j++] = s[i];
+		i++;
+	}
+	word[j] = '\0';
+	return (word);
+}
+
 static char	**insert_word(char **answer, size_t count, char const *s, char c)
 {
 	size_t	i;
 	size_t	index;
+	int		size;
 
 	i = 0;
 	index = 0;
@@ -63,15 +107,16 @@ static char	**insert_word(char **answer, size_t count, char const *s, char c)
 			i++;
 		if (!s[i])
 			return (answer);
-		if (s[i] == '\'' || s[i] == '\'')
-			i++;
-		answer[index] = ft_substr(s, i, size_word(s + i, c));
+		size = size_word(s + i, c);
+		answer[index] = extract_word_without_quotes(s + i, size);
 		if (answer[index] == NULL)
 		{
 			free_mem(answer, index);
 			return (NULL);
 		}
-		i += size_word(s + i, c);
+		i += size;
+		if (s[i] == c)
+			i++;
 		index++;
 	}
 	return (answer);
@@ -79,15 +124,45 @@ static char	**insert_word(char **answer, size_t count, char const *s, char c)
 
 char	**ft_split_ps(char const *s, char c)
 {
-	char **answer;
-	size_t count;
+	char	**answer;
+	size_t	count;
 
 	if (!s)
 		return (NULL);
-	count = count_word_pss(s, c);
+	count = count_word(s, c);
 	answer = malloc(sizeof(char *) * (count + 1));
 	if (answer == NULL)
 		return (NULL);
 	answer[count] = NULL;
-	return (insert_word(answer, count, s, c));
+	answer = insert_word(answer, count, s, c);
+	return (answer);
+	
 }
+// void sub_string(char **answer, char const *s, char c, int i, int index)
+// {
+// 	char *str1;
+// 	char *str2;
+// 	int start;
+// 	int flag;
+
+// 	flag = 0;
+// 	start = i;
+// 	while(s[i] != c && s[i] != '\'' && s[i])
+// 	{
+// 		if(s[i] == '\'' && flag == 0)
+// 		{
+// 			str1 = ft_substr(s, start, size_word(s + i, '\''));
+// 			start = i + 1;
+// 			flag = 1;
+// 		}
+// 		else if(s[i] == '\'' && flag == 1)
+// 		{
+// 			str2 = ft_substr(s, start, size_word(s + i, '\''));
+// 			flag = 1;
+// 		}
+// 		i++;
+// 	}
+// 	answer[index] = ft_strjoin(str1, str2);
+// 	free(str1);
+// 	free(str2);
+// }

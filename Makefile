@@ -16,11 +16,9 @@ $(LIBFT):
 	make -C includes/libft
 
 $(NAME):$(OBJ) $(LIBFT)
-	@echo "Linking pipex..."
 	$(CC) $(OBJ) -Lincludes/libft -lft -o $(NAME)
 
-%.o: %.c
-	@echo "Compiling: $< -> $@"
+%.o: %.c pipex.h
 	$(CC) -c $< -o $@
 
 
