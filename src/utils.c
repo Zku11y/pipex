@@ -6,7 +6,7 @@
 /*   By: mdakni <mdakni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 00:31:58 by skully            #+#    #+#             */
-/*   Updated: 2025/03/23 21:55:13 by mdakni           ###   ########.fr       */
+/*   Updated: 2025/03/24 00:32:33 by mdakni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ char	*path_parse(char **env, char *cmd)
 		if (access(tmp, F_OK & X_OK) == 0)
 			break;
 		free(tmp);
+		tmp = NULL;
 		j++;
 	}
 	free_2(str2);

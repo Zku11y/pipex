@@ -6,7 +6,7 @@
 /*   By: mdakni <mdakni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 18:08:45 by skully            #+#    #+#             */
-/*   Updated: 2025/03/23 22:55:23 by mdakni           ###   ########.fr       */
+/*   Updated: 2025/03/24 04:49:15 by mdakni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void manager_2(int *fd, t_fd fds, char **env, char **av, pid_t pid)
 	check_is_path(command);
 	path = path_parse(env, command[0]);
 	if (!pid)
-	{
+	{  // after the first command executes and the second fails, the first cmd's output doesnt reach the outfile.
 		if(fds.fd1 == -1)
 		{
 			perror("Outfile Error");
@@ -37,18 +37,24 @@ void manager_2(int *fd, t_fd fds, char **env, char **av, pid_t pid)
 		close(fds.fd2);
 		cmd2(fds.fd1, command, path, fd);
 	}
-	free(path);
-	free_2(command);
+	else
+	{
+		free(path);
+		free_2(command);
+	}
 }
 void manager_1(int *fd,t_fd fds, char **env, char **av, pid_t pid)
 {
 	char	*path;
 	char	**command;
+
 	command = cmd_parse(av, 2);
 	check_is_path(command);
 	path = path_parse(env, command[0]);
 	if (!pid)
 	{
+		// if(path == NULL)
+		// 	exit(1);
 		if(fds.fd2 == -1)
 		{
 			perror("Infile Error");
@@ -57,8 +63,11 @@ void manager_1(int *fd,t_fd fds, char **env, char **av, pid_t pid)
 		close(fds.fd1);
 		cmd1(fds.fd2, command, path, fd);
 	}
-	free(path);
-	free_2(command);
+	else
+	{
+		free(path);
+		free_2(command);
+	}	
 }
 
 int	main(int ac, char **av, char **env)
@@ -86,6 +95,8 @@ int	main(int ac, char **av, char **env)
 	manager_2(fd, fds, env, av, pid.pid2);
     close(fd[0]);
     close(fd[1]);
+	close(fds.fd1);
+	close(fds.fd2);
 	waitpid(pid.pid2, NULL, 0);
     waitpid(pid.pid1, NULL, 0);
 	return (0);
