@@ -6,21 +6,18 @@
 /*   By: mdakni <mdakni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 18:08:45 by skully            #+#    #+#             */
-/*   Updated: 2025/03/24 17:19:10 by mdakni           ###   ########.fr       */
+/*   Updated: 2025/03/24 21:47:48 by mdakni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../pipex.h"
 
-// void	check_leaks(void)
-// {
-// 	char cmd[256];
+void	check_leaks(void)
+{
+	system("leaks -q pipex");
+}
 
-// 	snprintf(cmd, sizeof(cmd), "leaks -q %d", getpid());
-// 	system(cmd);
-// }
-
-void	manager_2(int *fd, t_fd fds, char **env, char **av)
+pid_t	manager_2(int *fd, t_fd fds, char **env, char **av)
 {
 	char	*path;
 	char	**command;
@@ -31,7 +28,7 @@ void	manager_2(int *fd, t_fd fds, char **env, char **av)
 	path = path_parse(env, command[0]);
 	pid = fork();
 	if (pid == -1)
-		return (perror("\e[1;41mSecond Fork error\e[0m\n"), exit(EXIT_FAILURE));
+		return (perror("\e[1;41mSecond Fork error\e[0m\n"), exit(1), -1);
 	if (!pid)
 	{
 		if (fds.fd1 == -1)
@@ -42,11 +39,10 @@ void	manager_2(int *fd, t_fd fds, char **env, char **av)
 		close(fds.fd2);
 		cmd2(fds.fd1, command, path, fd);
 	}
-	else
-		(free(path), free_2(command));
+	return (free(path), free_2(command), pid);
 }
 
-void	manager_1(int *fd, t_fd fds, char **env, char **av)
+pid_t	manager_1(int *fd, t_fd fds, char **env, char **av)
 {
 	char	*path;
 	char	**command;
@@ -57,7 +53,7 @@ void	manager_1(int *fd, t_fd fds, char **env, char **av)
 	path = path_parse(env, command[0]);
 	pid = fork();
 	if (pid == -1)
-		return (perror("\e[1;41mFirst Fork error\e[0m\n"), exit(EXIT_FAILURE));
+		return (perror("\e[1;41mFirst Fork error\e[0m\n"), exit(1), -1);
 	if (!pid)
 	{
 		if (fds.fd2 == -1)
@@ -68,8 +64,7 @@ void	manager_1(int *fd, t_fd fds, char **env, char **av)
 		close(fds.fd1);
 		cmd1(fds.fd2, command, path, fd);
 	}
-	else
-		(free(path), free_2(command));
+	return (free(path), free_2(command), pid);
 }
 
 int	main(int ac, char **av, char **env)
@@ -78,6 +73,7 @@ int	main(int ac, char **av, char **env)
 	t_pid	pid;
 	t_fd	fds;
 
+	atexit(check_leaks);
 	fds = file_manage(av, 1);
 	if (ac != 5)
 	{
@@ -87,8 +83,8 @@ int	main(int ac, char **av, char **env)
 	}
 	if (pipe(fd) == -1)
 		return (perror("\e[1;41mPipe error\e[0m\n"), 1);
-	manager_1(fd, fds, env, av);
-	manager_2(fd, fds, env, av);
+	pid.pid1 = manager_1(fd, fds, env, av);
+	pid.pid2 = manager_2(fd, fds, env, av);
 	(close(fd[0]), close(fd[1]), close(fds.fd1), close(fds.fd2));
 	waitpid(pid.pid2, NULL, 0);
 	waitpid(pid.pid1, NULL, 0);

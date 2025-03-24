@@ -4,7 +4,9 @@ SRC = src/cmds.c src/main.c src/utils.c src/ft_split_ps.c
 
 LIBFT = includes/libft/libft.a
 
-CC = gcc -g -Wall -Wextra -Werror
+LIBFT_IN = includes/libft
+
+CC = cc -g -Wall -Wextra -Werror
 
 RM = rm -fr
 
@@ -13,10 +15,12 @@ OBJ = $(SRC:.c=.o)
 all: $(NAME)
 
 $(LIBFT):
-	make -C includes/libft
+	make -C $(LIBFT_IN)
 
 $(NAME):$(OBJ) $(LIBFT)
-	$(CC) $(OBJ) -Lincludes/libft -lft -o $(NAME)
+	$(CC) $(OBJ) -o $(NAME) $(LIBFT)
+
+# $(CC) $(OBJ) -L$(LIBFT_IN) -lft -o $(NAME)
 
 %.o: %.c pipex.h
 	$(CC) -c $< -o $@
@@ -24,11 +28,11 @@ $(NAME):$(OBJ) $(LIBFT)
 
 clean:
 	$(RM) $(OBJ)
-	make -C  includes/libft clean
+	make -C  $(LIBFT_IN) clean
 
 fclean: clean
 	$(RM) $(NAME)
-	make -C  includes/libft fclean
+	make -C  $(LIBFT_IN) fclean
 
 re: fclean all
 

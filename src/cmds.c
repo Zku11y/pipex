@@ -6,7 +6,7 @@
 /*   By: mdakni <mdakni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 05:44:10 by mdakni            #+#    #+#             */
-/*   Updated: 2025/03/24 17:23:43 by mdakni           ###   ########.fr       */
+/*   Updated: 2025/03/24 21:29:51 by mdakni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,27 +16,27 @@ size_t	count_word_ps(char const *s, char c)
 {
 	size_t	i;
 	size_t	count;
-	bool	inside_quotes;
 
 	i = 0;
 	count = 0;
-	inside_quotes = false;
 	while (s[i])
 	{
-		if (s[i] == '\'')
-			inside_quotes = !inside_quotes;
-		if (s[i] != c || inside_quotes)
+		while (s[i] == c && s[i])
+			i++;
+		if (s[i] != c && s[i])
 		{
-			while ((s[i] != c || inside_quotes) && s[i])
+			while (s[i] != c && s[i])
 			{
 				if (s[i] == '\'')
-					inside_quotes = !inside_quotes;
+				{
+					i++;
+					while (s[i] != '\'' && s[i])
+						i++;
+				}
 				i++;
 			}
 			count++;
 		}
-		else
-			i++;
 	}
 	return (count);
 }

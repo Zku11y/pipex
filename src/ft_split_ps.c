@@ -6,7 +6,7 @@
 /*   By: mdakni <mdakni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 18:50:16 by mdakni            #+#    #+#             */
-/*   Updated: 2025/03/24 17:23:31 by mdakni           ###   ########.fr       */
+/*   Updated: 2025/03/24 21:21:16 by mdakni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,35 +102,7 @@ char	**ft_split_ps(char const *s, char c)
 	answer = malloc(sizeof(char *) * (count + 1));
 	if (answer == NULL)
 		return (NULL);
-	answer[count - 1] = NULL;
 	answer = insert_word(answer, count, s, c);
+	answer[count] = NULL;
 	return (answer);
 }
-// void sub_string(char **answer, char const *s, char c, int i, int index)
-// {
-// 	char *str1;
-// 	char *str2;
-// 	int start;
-// 	int flag;
-
-// 	flag = 0;
-// 	start = i;
-// 	while(s[i] != c && s[i] != '\'' && s[i])
-// 	{
-// 		if(s[i] == '\'' && flag == 0)
-// 		{
-// 			str1 = ft_substr(s, start, size_word(s + i, '\''));
-// 			start = i + 1;
-// 			flag = 1;
-// 		}
-// 		else if(s[i] == '\'' && flag == 1)
-// 		{
-// 			str2 = ft_substr(s, start, size_word(s + i, '\''));
-// 			flag = 1;
-// 		}
-// 		i++;
-// 	}
-// 	answer[index] = ft_strjoin(str1, str2);
-// 	free(str1);
-// 	free(str2);
-// }
