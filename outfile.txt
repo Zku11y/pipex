@@ -1,0 +1,12 @@
+Makefile
+README.md
+bruh
+cmd_ps
+includes
+infile.txt
+out
+outfile.txt
+pipex
+pipex.h
+src
+you

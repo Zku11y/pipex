@@ -6,7 +6,7 @@
 /*   By: mdakni <mdakni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 00:31:58 by skully            #+#    #+#             */
-/*   Updated: 2025/03/24 00:32:33 by mdakni           ###   ########.fr       */
+/*   Updated: 2025/03/24 13:45:23 by mdakni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,22 @@ t_fd	file_manage(char **av, int i)
 	return (fds);
 }
 
+int check_perms(char *cmd, char **env)
+{
+	char *str;
+	int i;
+
+	i = 0;
+	while (env[i])
+	{
+		str = ft_strnstr(env[i], "PATH", sizeof(env[i]));
+		if (str)
+			break ;
+		i++;
+	}
+	return(i);
+}
+
 char	*path_parse(char **env, char *cmd)
 {
 	int		i;
@@ -32,13 +48,9 @@ char	*path_parse(char **env, char *cmd)
 	i = 0;
 	j = 0;
 	str = NULL;
-	while (env[i])
-	{
-		str = ft_strnstr(env[i], "PATH", sizeof(env[i]));
-		if (str)
-			break ;
-		i++;
-	}
+	if(cmd == NULL)
+		return(NULL);
+	i = check_perms(cmd, env);
 	str2 = ft_split(env[i] + 5, ':');
 	while (str2[j])
 	{
@@ -51,8 +63,7 @@ char	*path_parse(char **env, char *cmd)
 		tmp = NULL;
 		j++;
 	}
-	free_2(str2);
-	return (tmp);
+	return (free_2(str2), tmp);
 }
 
 void free_2(char **str)
@@ -70,13 +81,6 @@ void free_2(char **str)
 	str = NULL;
 }
 
-void	check_leaks(void)
-{
-	char	cmd[256];
-
-	snprintf(cmd, sizeof(cmd), "leaks -q %d", getpid());
-	system(cmd);
-}
 char	**cmd_parse(char **av, int index)
 {
 	int		i;
@@ -89,3 +93,11 @@ char	**cmd_parse(char **av, int index)
 		i++;
 	return (command);
 }
+
+// void	check_leaks(void)
+// {
+// 	char	cmd[256];
+
+// 	snprintf(cmd, sizeof(cmd), "leaks -q %d", getpid());
+// 	system(cmd);
+// }
