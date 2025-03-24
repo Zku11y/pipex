@@ -1,10 +1,10 @@
 NAME = pipex
 
-SRC = src/cmds.c src/main.c src/utils.c cmd_ps/ft_split_ps.c cmd_ps/misc.c
+SRC = src/cmds.c src/main.c src/utils.c src/ft_split_ps.c
 
 LIBFT = includes/libft/libft.a
 
-CC = gcc -g
+CC = gcc -g -Wall -Wextra -Werror
 
 RM = rm -fr
 

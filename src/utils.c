@@ -6,7 +6,7 @@
 /*   By: mdakni <mdakni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 00:31:58 by skully            #+#    #+#             */
-/*   Updated: 2025/03/24 13:45:23 by mdakni           ###   ########.fr       */
+/*   Updated: 2025/03/24 17:18:12 by mdakni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,17 @@
 
 t_fd	file_manage(char **av, int i)
 {
-	t_fd fds;
+	t_fd	fds;
 
 	fds.fd1 = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	fds.fd2 = open(av[i], O_RDONLY);
 	return (fds);
 }
 
-int check_perms(char *cmd, char **env)
+int	check_perms(char **env)
 {
-	char *str;
-	int i;
+	char	*str;
+	int		i;
 
 	i = 0;
 	while (env[i])
@@ -34,23 +34,23 @@ int check_perms(char *cmd, char **env)
 			break ;
 		i++;
 	}
-	return(i);
+	return (i);
 }
 
 char	*path_parse(char **env, char *cmd)
 {
 	int		i;
 	int		j;
-	char *tmp;
-	char *str;
+	char	*tmp;
+	char	*str;
 	char	**str2;
 
 	i = 0;
 	j = 0;
 	str = NULL;
-	if(cmd == NULL)
-		return(NULL);
-	i = check_perms(cmd, env);
+	if (cmd == NULL)
+		return (NULL);
+	i = check_perms(env);
 	str2 = ft_split(env[i] + 5, ':');
 	while (str2[j])
 	{
@@ -58,7 +58,7 @@ char	*path_parse(char **env, char *cmd)
 		tmp = ft_strjoin(str2[j], str);
 		free(str);
 		if (access(tmp, F_OK & X_OK) == 0)
-			break;
+			break ;
 		free(tmp);
 		tmp = NULL;
 		j++;
@@ -66,12 +66,12 @@ char	*path_parse(char **env, char *cmd)
 	return (free_2(str2), tmp);
 }
 
-void free_2(char **str)
+void	free_2(char **str)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while(str[i])
+	while (str[i])
 	{
 		free(str[i]);
 		str[i] = NULL;
@@ -83,21 +83,9 @@ void free_2(char **str)
 
 char	**cmd_parse(char **av, int index)
 {
-	int		i;
 	char	**command;
 
 	command = NULL;
 	command = ft_split_ps(av[index], ' ');
-	i = 0;
-	while (command[i])
-		i++;
 	return (command);
 }
-
-// void	check_leaks(void)
-// {
-// 	char	cmd[256];
-
-// 	snprintf(cmd, sizeof(cmd), "leaks -q %d", getpid());
-// 	system(cmd);
-// }

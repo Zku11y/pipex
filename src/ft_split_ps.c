@@ -6,17 +6,16 @@
 /*   By: mdakni <mdakni@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 18:50:16 by mdakni            #+#    #+#             */
-/*   Updated: 2025/03/23 22:13:25 by mdakni           ###   ########.fr       */
+/*   Updated: 2025/03/24 17:23:31 by mdakni           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../pipex.h"
-
 #include <stdbool.h>
 
 static int	size_word(char const *s, char c)
 {
-	int	i;
+	int		i;
 	bool	inside_quotes;
 
 	i = 0;
@@ -26,39 +25,10 @@ static int	size_word(char const *s, char c)
 		if (s[i] == '\'')
 			inside_quotes = !inside_quotes;
 		else if (s[i] == c && !inside_quotes)
-			break;
+			break ;
 		i++;
 	}
 	return (i);
-}
-
-static size_t	count_word(char const *s, char c)
-{
-	size_t	i;
-	size_t	count;
-	bool	inside_quotes;
-
-	i = 0;
-	count = 0;
-	inside_quotes = false;
-	while (s[i])
-	{
-		if (s[i] == '\'')
-			inside_quotes = !inside_quotes;
-		if (s[i] != c || inside_quotes)
-		{
-			while ((s[i] != c || inside_quotes) && s[i])
-			{
-				if (s[i] == '\'')
-					inside_quotes = !inside_quotes;
-				i++;
-			}
-			count++;
-		}
-		else
-			i++;
-	}
-	return (count);
 }
 
 static void	free_mem(char **answer, size_t count)
@@ -74,13 +44,12 @@ static void	free_mem(char **answer, size_t count)
 static char	*extract_word_without_quotes(char const *s, int size)
 {
 	char	*word;
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 
 	word = (char *)malloc(sizeof(char) * (size + 1));
 	if (!word)
 		return (NULL);
-	
 	i = 0;
 	j = 0;
 	while (i < size)
@@ -129,14 +98,13 @@ char	**ft_split_ps(char const *s, char c)
 
 	if (!s)
 		return (NULL);
-	count = count_word(s, c);
+	count = count_word_ps(s, c);
 	answer = malloc(sizeof(char *) * (count + 1));
 	if (answer == NULL)
 		return (NULL);
-	answer[count] = NULL;
+	answer[count - 1] = NULL;
 	answer = insert_word(answer, count, s, c);
 	return (answer);
-	
 }
 // void sub_string(char **answer, char const *s, char c, int i, int index)
 // {

@@ -1,0 +1,13 @@
+total 24
+drwxr-xr-x  12 mdakni  candidates   408 Mar 24 14:07 .
+drwxr-xr-x  14 mdakni  candidates   476 Mar 22 21:36 ..
+drwxr-xr-x  13 mdakni  candidates   442 Mar 24 13:47 .git
+drwxr-xr-x   5 mdakni  candidates   170 Mar 23 01:06 .vscode
+-rw-r--r--   1 mdakni  candidates   485 Mar 23 13:49 Makefile
+-rw-r--r--   1 mdakni  candidates     7 Mar 22 21:36 README.md
+drwxr-xr-x   4 mdakni  candidates   136 Mar 24 14:07 cmd_ps
+-rw-r--r--   1 mdakni  candidates     0 Mar 24 14:07 in
+drwxr-xr-x   3 mdakni  candidates   102 Mar 22 21:36 includes
+-rw-r--r--   1 mdakni  candidates     0 Mar 24 14:06 oute
+-rw-r--r--   1 mdakni  candidates  1651 Mar 24 13:11 pipex.h
+drwxr-xr-x   5 mdakni  candidates   170 Mar 24 14:07 src
