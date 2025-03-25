@@ -6,7 +6,7 @@
 /*   By: skully <skully@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 00:31:58 by skully            #+#    #+#             */
-/*   Updated: 2025/03/25 16:35:18 by skully           ###   ########.fr       */
+/*   Updated: 2025/03/25 18:01:02 by skully           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	free_2(char **str)
 	i = 0;
 	if(!str)
 		return;
-	while ((*str) && str[i])
+	while (str[i])
 	{
 		free(str[i]);
 		str[i] = NULL;

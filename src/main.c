@@ -6,7 +6,7 @@
 /*   By: skully <skully@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 18:08:45 by skully            #+#    #+#             */
-/*   Updated: 2025/03/25 17:05:25 by skully           ###   ########.fr       */
+/*   Updated: 2025/03/25 18:01:51 by skully           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ pid_t	manager_1(int *fd, t_fd fds, char **env, char **av)
 	check_is_path(command);
 	if(command == NULL)
 		path = NULL;
-	else	
+	else
 		path = path_parse(env, command[0]);
 	pid = fork();
 	if (pid == -1)
