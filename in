@@ -1,0 +1,12 @@
+total 64
+drwxr-xr-x 6 skully skully  4096 Mar 25 12:11 .
+drwxr-xr-x 4 skully skully  4096 Mar 25 11:49 ..
+drwxr-xr-x 7 skully skully  4096 Mar 25 11:53 .git
+-rw-r--r-- 1 skully skully     0 Mar 25 12:11 in
+drwxr-xr-x 3 skully skully  4096 Mar 25 11:49 includes
+-rw-r--r-- 1 skully skully   540 Mar 25 11:49 Makefile
+---------- 1 skully skully     0 Mar 25 12:10 out
+-rwxr-xr-x 1 skully skully 29512 Mar 25 12:09 pipex
+-rw-r--r-- 1 skully skully  1626 Mar 25 11:59 pipex.h
+drwxr-xr-x 2 skully skully  4096 Mar 25 12:09 src
+drwxr-xr-x 2 skully skully  4096 Mar 25 11:49 .vscode

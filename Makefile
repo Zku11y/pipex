@@ -15,7 +15,7 @@ OBJ = $(SRC:.c=.o)
 all: $(NAME)
 
 $(LIBFT):
-	make -C $(LIBFT_IN)
+#	make -C $(LIBFT_IN)
 
 $(NAME):$(OBJ) $(LIBFT)
 	$(CC) $(OBJ) -o $(NAME) $(LIBFT)
@@ -28,11 +28,11 @@ $(NAME):$(OBJ) $(LIBFT)
 
 clean:
 	$(RM) $(OBJ)
-	make -C  $(LIBFT_IN) clean
+#	make -C  $(LIBFT_IN) clean
 
 fclean: clean
 	$(RM) $(NAME)
-	make -C  $(LIBFT_IN) fclean
+#	make -C  $(LIBFT_IN) fclean
 
 re: fclean all
 

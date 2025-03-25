@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split_ps.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdakni <mdakni@student.42.fr>              +#+  +:+       +#+        */
+/*   By: skully <skully@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 18:50:16 by mdakni            #+#    #+#             */
-/*   Updated: 2025/03/24 21:21:16 by mdakni           ###   ########.fr       */
+/*   Updated: 2025/03/25 16:40:28 by skully           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,7 @@ static char	**insert_word(char **answer, size_t count, char const *s, char c)
 		size = size_word(s + i, c);
 		answer[index] = extract_word_without_quotes(s + i, size);
 		if (answer[index] == NULL)
-		{
-			free_mem(answer, index);
-			return (NULL);
-		}
+			return (free_mem(answer, index), NULL);
 		i += size;
 		if (s[i] == c)
 			i++;
@@ -99,10 +96,14 @@ char	**ft_split_ps(char const *s, char c)
 	if (!s)
 		return (NULL);
 	count = count_word_ps(s, c);
+	if(count == 0)
+		return(NULL);
 	answer = malloc(sizeof(char *) * (count + 1));
 	if (answer == NULL)
 		return (NULL);
 	answer = insert_word(answer, count, s, c);
+	if(answer == NULL)
+		return(NULL);
 	answer[count] = NULL;
 	return (answer);
 }

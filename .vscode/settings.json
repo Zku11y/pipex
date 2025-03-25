@@ -3,7 +3,9 @@
     "pipex.h": "c",
     "stdbool.h": "c",
     "wait.h": "c",
-    "fcntl.h": "c"
+    "fcntl.h": "c",
+    "*.tcc": "c",
+    "fstream": "c"
   },
   "C_Cpp_Runner.cCompilerPath": "clang",
   "C_Cpp_Runner.cppCompilerPath": "clang++",

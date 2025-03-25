@@ -1,0 +1,19 @@
+total 39192
+drwxr-xr-x 7 skully skully    4096 Mar 25 17:06 .
+drwxr-xr-x 5 skully skully    4096 Mar 25 13:03 ..
+drwxr-xr-x 7 skully skully    4096 Mar 25 17:05 .git
+drwxr-xr-x 2 skully skully    4096 Mar 25 11:49 .vscode
+-rw-r--r-- 1 skully skully     543 Mar 25 14:52 Makefile
+drwxr-xr-x 3 skully skully    4096 Mar 25 14:55 fuck
+-rwxrwxrwx 1 skully skully     576 Mar 25 12:11 in
+drwxr-xr-x 3 skully skully    4096 Mar 25 11:49 includes
+-rwxrwxrwx 1 skully skully       0 Mar 25 17:06 out
+-rwxr-xr-x 1 skully skully   30176 Mar 25 17:06 pipex
+-rw-r--r-- 1 skully skully    1668 Mar 25 15:43 pipex.h
+drwxr-xr-x 2 skully skully    4096 Mar 25 17:06 src
+-rw------- 1 skully skully 6676480 Mar 25 12:13 vgcore.24859
+-rw------- 1 skully skully 6676480 Mar 25 12:34 vgcore.39116
+-rw------- 1 skully skully 6676480 Mar 25 12:37 vgcore.40893
+-rw------- 1 skully skully 6676480 Mar 25 12:41 vgcore.43864
+-rw------- 1 skully skully 6676480 Mar 25 12:42 vgcore.44311
+-rw------- 1 skully skully 6676480 Mar 25 12:43 vgcore.45062
